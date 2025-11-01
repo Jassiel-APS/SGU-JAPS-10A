@@ -1,36 +1,36 @@
 services:
   database:
     image: mysql:8
-    container_name: bd_gsu_japs_10a-database
+    container_name: sgu-database
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: bd_gsu_japs_10a
     ports:
       - "3307:3306"
     volumes:
-      - bd_gsu_japs_10a-volume:/var/lib/mysql
+      - sgu-volume:/var/lib/mysql
     networks:
-      - bd_gsu_japs_10a-net
+      - sgu-net
     restart: unless-stopped
 
   frontend:
-    image: client:1.0-bd_gsu_japs_10a
+    image: client:1.0-sgu
     build:
       context: ./client
       args:
         API_HOST: localhost
         API_PORT: 8081
         API_BASE: /api/users
-    container_name: bd_gsu_japs_10a-frontend
+    container_name: sgu-frontend
     ports:
       - "3000:80"
     networks:
-      - bd_gsu_japs_10a-net
+      - sgu-net
     depends_on:
       - database
 
   backend:
-    image: server:1.0-bd_gsu_japs_10a
+    image: server:1.0-sgu
     build:
       context: ./server
     environment:
@@ -40,19 +40,19 @@ services:
       DB_NAME: bd_gsu_japs_10a
       DB_USER: root
       DB_PASS: root
-    container_name: bd_gsu_japs_10a-backend
+    container_name: sgu-backend
     ports:
       - "8081:8080"
     networks:
-      - bd_gsu_japs_10a-net
+      - sgu-net
     depends_on:
       - frontend
 
 volumes:
-  bd_gsu_japs_10a-volume:
+  sgu-volume:
     external: true
 
 
 networks:
-  bd_gsu_japs_10a-net:
+  sgu-net:
     external: true

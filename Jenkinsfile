@@ -6,7 +6,7 @@ pipeline {
         stage('Parando los servicios...') {
             steps {
                 bat '''
-                    docker compose -p bd_gsu_japs_10a-jcr-10a down || exit /b 0
+                    docker compose -p sgu-japs-10a down || exit /b 0
                 '''
             }
         }
@@ -15,7 +15,7 @@ pipeline {
         stage('Eliminando imágenes anteriores...') {
             steps {
                 bat '''
-                    for /f "tokens=*" %%i in ('docker images --filter "label=com.docker.compose.project=bd_gsu_japs_10a-japs-10a" -q') do (
+                    for /f "tokens=*" %%i in ('docker images --filter "label=com.docker.compose.project=sgu-japs-10a" -q') do (
                         docker rmi -f %%i
                     )
                     if errorlevel 1 (
